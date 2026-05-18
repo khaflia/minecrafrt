@@ -86,6 +86,39 @@ public class ZoneListener implements Listener {
         }
     }
 
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBlockIgnite(BlockIgniteEvent event) {
+        if (plugin.getZoneManager().isProtected(event.getBlock().getLocation())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBlockBurn(BlockBurnEvent event) {
+        if (plugin.getZoneManager().isProtected(event.getBlock().getLocation())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onBlockSpread(BlockSpreadEvent event) {
+        if (plugin.getZoneManager().isProtected(event.getBlock().getLocation())
+            || plugin.getZoneManager().isProtected(event.getSource().getLocation())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void onSignChange(SignChangeEvent event) {
+        Player player = event.getPlayer();
+        if (canBypass(player)) return;
+        if (plugin.getZoneManager().isProtected(event.getBlock().getLocation())) {
+            event.setCancelled(true);
+            notify(player);
+        }
+    }
+
     // ── Explosions (TNT, creeper, etc.) ─────────────────────────
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onExplosion(EntityExplodeEvent event) {

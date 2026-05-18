@@ -61,6 +61,10 @@ commands:
   rtp:
     description: Teleport to a random safe location
     usage: /rtp
+  protect:
+    description: Get protection wand and create protected areas
+    usage: /protect [create <name>]
+    permission: dhabicore.zone
 
 permissions:
   dhabicore.admin:
