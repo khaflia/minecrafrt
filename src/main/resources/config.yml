@@ -23,21 +23,38 @@ homes:
 
 # ---- VeinMiner ----
 veinminer:
-  always-active: false
+  force-enabled: true
+  always-active: true
+  require-sneak: false
+  require-permission: false
+  diagonal-detection: true
   max-blocks: 64
+  custom-ores: []
   world-blacklist:
     - world_nether
 
 # ---- TreeFeller ----
 treefeller:
-  always-active: false
-  # Logs ONLY — leaves decay naturally
-  max-blocks: 50
+  force-enabled: true
+  always-active: true
+  require-sneak: false
+  require-permission: false
+  require-axe: true
+  min-leaves: 3
+  diagonal-detection: true
+  # Max allowed by safety cap: 512
+  max-blocks: 128
+  custom-logs: []
+  allowed-axes: []
   world-blacklist:
     - world_nether
 
 # ---- Scoreboard ----
 scoreboard:
-  title: "&f&lKhaleej&bSMP"
+  title: "&b&lKhaleej &f&lSMP"
   # Refresh every N ticks (20 = 1 second)
   refresh-ticks: 40
+
+# ---- RTP ----
+rtp:
+  radius: 2000

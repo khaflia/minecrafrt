@@ -20,8 +20,9 @@ public class TreeFellerListener implements Listener {
         Player player = event.getPlayer();
 
         if (player.getGameMode() == GameMode.CREATIVE) return;
+        if (plugin.getConfig().getBoolean("treefeller.require-permission", false) && !player.hasPermission("dhabicore.treefeller.use")) return;
+        if (plugin.getConfig().getBoolean("treefeller.require-sneak", false) && !player.isSneaking()) return;
         if (!plugin.getTreeFellerManager().isToggled(player)) return;
-        if (!player.isSneaking() && !plugin.getConfig().getBoolean("treefeller.always-active", false)) return;
         if (plugin.getTreeFellerManager().isWorldBlacklisted(player.getWorld())) return;
         if (plugin.getTreeFellerManager().isProcessing(player)) return;
 
