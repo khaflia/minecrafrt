@@ -2,10 +2,7 @@ package me.kbk.dhabicore.listeners;
 
 import me.kbk.dhabicore.DhabiCore;
 import me.kbk.dhabicore.managers.ZoneManager;
-import me.kbk.dhabicore.ranks.Rank;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -153,12 +150,9 @@ public class ZoneListener implements Listener {
 
     // ── Helpers ──────────────────────────────────────────────────
 
-    /** Staff, Admin, Owner, and ops bypass zone protection */
+    /** Only ops or explicit bypass permission can edit protected zones */
     private boolean canBypass(Player player) {
-        if (player.isOp()) return true;
-        if (player.hasPermission("dhabicore.zone.bypass")) return true;
-        Rank rank = plugin.getRankManager().getRank(player);
-        return rank.isAtLeast(Rank.STAFF);
+        return player.isOp() || player.hasPermission("dhabicore.zone.bypass");
     }
 
     private void notify(Player player) {
@@ -184,6 +178,7 @@ public class ZoneListener implements Listener {
             || name.contains("ANVIL") || name.contains("ENCHANTING") || name.contains("BEACON")
             || name.contains("CRAFTING") || name.contains("LOOM") || name.contains("GRINDSTONE")
             || name.contains("STONECUTTER") || name.contains("SMITHING") || name.contains("CAMPFIRE")
+            || name.contains("SIGN")
             || m == Material.JUKEBOX || m == Material.NOTE_BLOCK || m == Material.BELL;
     }
 }
