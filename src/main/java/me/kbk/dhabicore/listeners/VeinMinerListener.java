@@ -20,8 +20,9 @@ public class VeinMinerListener implements Listener {
         Player player = event.getPlayer();
 
         if (player.getGameMode() == GameMode.CREATIVE) return;
+        if (plugin.getConfig().getBoolean("veinminer.require-permission", false) && !player.hasPermission("dhabicore.veinminer.use")) return;
+        if (plugin.getConfig().getBoolean("veinminer.require-sneak", false) && !player.isSneaking()) return;
         if (!plugin.getVeinMinerManager().isToggled(player)) return;
-        if (!player.isSneaking() && !plugin.getConfig().getBoolean("veinminer.always-active", false)) return;
         if (plugin.getVeinMinerManager().isWorldBlacklisted(player.getWorld())) return;
         if (plugin.getVeinMinerManager().isProcessing(player)) return;
 
@@ -29,9 +30,10 @@ public class VeinMinerListener implements Listener {
         if (!plugin.getVeinMinerManager().isMiningTool(tool.getType())) return;
         if (!plugin.getVeinMinerManager().isOre(event.getBlock().getType())) return;
 
-        // Schedule on next tick to let the original block break first
         org.bukkit.block.Block block = event.getBlock();
+        org.bukkit.Material targetType = block.getType();
+        event.setCancelled(true);
         plugin.getServer().getScheduler().runTask(plugin, () ->
-            plugin.getVeinMinerManager().mineVein(player, block));
+            plugin.getVeinMinerManager().mineVein(player, block, targetType));
     }
 }

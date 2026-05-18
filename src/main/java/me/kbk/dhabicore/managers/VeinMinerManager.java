@@ -8,6 +8,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,20 +68,19 @@ public class VeinMinerManager {
     }
 
     public boolean isToggled(Player player) {
-        return toggledOn.contains(player.getUniqueId());
+        return plugin.getConfig().getBoolean("veinminer.force-enabled", true);
     }
 
     public void toggle(Player player) {
-        if (toggledOn.contains(player.getUniqueId())) {
-            toggledOn.remove(player.getUniqueId());
-        } else {
-            toggledOn.add(player.getUniqueId());
-        }
-        saveAll();
+        // Force-enabled mode: ignore toggles so behavior stays on 24/7.
     }
 
     public boolean isOre(Material m) {
-        return ORE_BLOCKS.contains(m);
+        if (ORE_BLOCKS.contains(m)) return true;
+        for (String name : plugin.getConfig().getStringList("veinminer.custom-ores")) {
+            if (m.name().equalsIgnoreCase(name)) return true;
+        }
+        return false;
     }
 
     public boolean isMiningTool(Material m) {
@@ -101,7 +101,8 @@ public class VeinMinerManager {
      * All safety checks included.
      */
     public List<Block> getVein(Block origin, Material targetMaterial, Player player) {
-        int maxBlocks = plugin.getConfig().getInt("veinminer.max-blocks", 64);
+        int maxBlocks = Math.min(plugin.getConfig().getInt("veinminer.max-blocks", 64), 512);
+        boolean diagonal = plugin.getConfig().getBoolean("veinminer.diagonal-detection", true);
         List<Block> vein = new ArrayList<>();
         Set<Block> visited = new HashSet<>();
         Queue<Block> queue = new LinkedList<>();
@@ -119,6 +120,7 @@ public class VeinMinerManager {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dz = -1; dz <= 1; dz++) {
                         if (dx == 0 && dy == 0 && dz == 0) continue;
+                        if (!diagonal && Math.abs(dx) + Math.abs(dy) + Math.abs(dz) > 1) continue;
                         Block neighbor = current.getRelative(dx, dy, dz);
                         if (!visited.contains(neighbor) && neighbor.getType() == targetMaterial) {
                             visited.add(neighbor);
@@ -131,37 +133,41 @@ public class VeinMinerManager {
         return vein;
     }
 
-    public void mineVein(Player player, Block block) {
+    public void mineVein(Player player, Block origin, Material targetMaterial) {
         if (isProcessing(player)) return;
+        if (plugin.getZoneManager().isProtected(origin.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) return;
         processing.add(player.getUniqueId());
 
         try {
-            List<Block> vein = getVein(block, block.getType(), player);
+            List<Block> vein = getVein(origin, targetMaterial, player);
             ItemStack tool = player.getInventory().getItemInMainHand();
 
             for (Block b : vein) {
-                if (b.equals(block)) continue; // Already broken by the event
-                // Damage tool durability
-                if (tool != null && tool.getType() != Material.AIR) {
-                    damageToolBy(player, tool, 1);
-                    if (tool.getType() == Material.AIR) break; // Tool broke
-                }
-                b.breakNaturally(tool);
+                if (plugin.getZoneManager().isProtected(b.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) continue;
+                breakWithDrops(player, b, tool);
             }
         } finally {
             processing.remove(player.getUniqueId());
         }
     }
+    private void breakWithDrops(Player player, Block block, ItemStack tool) {
+        if (block.getType() == Material.AIR) return;
 
-    @SuppressWarnings("deprecation")
-    private void damageToolBy(Player player, ItemStack tool, int amount) {
-        if (tool == null) return;
-        short newDurability = (short) (tool.getDurability() + amount);
-        short maxDurability = tool.getType().getMaxDurability();
-        if (newDurability >= maxDurability) {
-            player.getInventory().setItemInMainHand(null);
-        } else {
-            tool.setDurability(newDurability);
+        Collection<ItemStack> drops = block.getDrops(tool, player);
+        block.setType(Material.AIR, false);
+        for (ItemStack drop : drops) {
+            block.getWorld().dropItemNaturally(block.getLocation(), drop);
+        }
+
+        if (tool != null && tool.getType().getMaxDurability() > 0 && tool.getItemMeta() instanceof Damageable meta) {
+            int next = meta.getDamage() + 1;
+            if (next >= tool.getType().getMaxDurability()) {
+                player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+            } else {
+                meta.setDamage(next);
+                tool.setItemMeta(meta);
+            }
         }
     }
+
 }
