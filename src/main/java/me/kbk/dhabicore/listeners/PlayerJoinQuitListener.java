@@ -24,6 +24,7 @@ public class PlayerJoinQuitListener implements Listener {
         }
 
         plugin.getScoreboardManager().setupScoreboard(player);
+        plugin.getScoreboardManager().refreshAllPlayerVisuals();
 
         String joinMsg = plugin.getConfig().getString("chat.join-message", "&e{player} &ajoined the server!")
             .replace("{player}", plugin.getRankManager().getRank(player).getDisplayName() + " " + player.getName());
@@ -35,6 +36,7 @@ public class PlayerJoinQuitListener implements Listener {
         Player player = event.getPlayer();
         plugin.getTpaManager().cancelAllFor(player);
         plugin.getScoreboardManager().removeScoreboard(player);
+        plugin.getScoreboardManager().refreshAllPlayerVisuals();
 
         String quitMsg = plugin.getConfig().getString("chat.quit-message", "&e{player} &cleft the server.")
             .replace("{player}", player.getName());

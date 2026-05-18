@@ -11,10 +11,8 @@ public class VeinMinerCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Players only."); return true; }
-        plugin.getVeinMinerManager().toggle(player);
-        boolean on = plugin.getVeinMinerManager().isToggled(player);
-        player.sendMessage(plugin.msg("veinminer.toggled")
-            .replace("{status}", on ? "&aEnabled" : "&cDisabled"));
+        player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&',
+            "&b■ &fVeinMiner is always enabled on this server."));
         plugin.getScoreboardManager().updateScoreboard(player);
         return true;
     }

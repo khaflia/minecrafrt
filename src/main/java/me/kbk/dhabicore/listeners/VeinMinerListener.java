@@ -20,8 +20,9 @@ public class VeinMinerListener implements Listener {
         Player player = event.getPlayer();
 
         if (player.getGameMode() == GameMode.CREATIVE) return;
+        if (plugin.getConfig().getBoolean("veinminer.require-permission", false) && !player.hasPermission("dhabicore.veinminer.use")) return;
+        if (plugin.getConfig().getBoolean("veinminer.require-sneak", false) && !player.isSneaking()) return;
         if (!plugin.getVeinMinerManager().isToggled(player)) return;
-        if (!player.isSneaking() && !plugin.getConfig().getBoolean("veinminer.always-active", false)) return;
         if (plugin.getVeinMinerManager().isWorldBlacklisted(player.getWorld())) return;
         if (plugin.getVeinMinerManager().isProcessing(player)) return;
 

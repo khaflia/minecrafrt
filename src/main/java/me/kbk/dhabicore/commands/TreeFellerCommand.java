@@ -11,10 +11,8 @@ public class TreeFellerCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Players only."); return true; }
-        plugin.getTreeFellerManager().toggle(player);
-        boolean on = plugin.getTreeFellerManager().isToggled(player);
-        player.sendMessage(plugin.msg("treefeller.toggled")
-            .replace("{status}", on ? "&aEnabled" : "&cDisabled"));
+        player.sendMessage(org.bukkit.ChatColor.translateAlternateColorCodes('&',
+            "&b■ &fTreeFeller is always enabled on this server."));
         plugin.getScoreboardManager().updateScoreboard(player);
         return true;
     }

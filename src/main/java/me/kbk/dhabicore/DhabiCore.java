@@ -50,6 +50,9 @@ public class DhabiCore extends JavaPlugin {
         getCommand("zone").setExecutor(new ZoneCommand(this));
         getCommand("pos1").setExecutor(new PosCommand(this, 1));
         getCommand("pos2").setExecutor(new PosCommand(this, 2));
+        getCommand("fly").setExecutor(new FlyCommand(this));
+        getCommand("rtp").setExecutor(new RtpCommand(this));
+        getCommand("protect").setExecutor(new ProtectCommand(this));
 
         // Listeners
         getServer().getPluginManager().registerEvents(new TpaListener(this), this);

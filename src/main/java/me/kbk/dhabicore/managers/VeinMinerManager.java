@@ -67,20 +67,19 @@ public class VeinMinerManager {
     }
 
     public boolean isToggled(Player player) {
-        return toggledOn.contains(player.getUniqueId());
+        return plugin.getConfig().getBoolean("veinminer.force-enabled", true);
     }
 
     public void toggle(Player player) {
-        if (toggledOn.contains(player.getUniqueId())) {
-            toggledOn.remove(player.getUniqueId());
-        } else {
-            toggledOn.add(player.getUniqueId());
-        }
-        saveAll();
+        // Force-enabled mode: ignore toggles so behavior stays on 24/7.
     }
 
     public boolean isOre(Material m) {
-        return ORE_BLOCKS.contains(m);
+        if (ORE_BLOCKS.contains(m)) return true;
+        for (String name : plugin.getConfig().getStringList("veinminer.custom-ores")) {
+            if (m.name().equalsIgnoreCase(name)) return true;
+        }
+        return false;
     }
 
     public boolean isMiningTool(Material m) {
@@ -101,7 +100,8 @@ public class VeinMinerManager {
      * All safety checks included.
      */
     public List<Block> getVein(Block origin, Material targetMaterial, Player player) {
-        int maxBlocks = plugin.getConfig().getInt("veinminer.max-blocks", 64);
+        int maxBlocks = Math.min(plugin.getConfig().getInt("veinminer.max-blocks", 64), 512);
+        boolean diagonal = plugin.getConfig().getBoolean("veinminer.diagonal-detection", true);
         List<Block> vein = new ArrayList<>();
         Set<Block> visited = new HashSet<>();
         Queue<Block> queue = new LinkedList<>();
@@ -119,6 +119,7 @@ public class VeinMinerManager {
                 for (int dy = -1; dy <= 1; dy++) {
                     for (int dz = -1; dz <= 1; dz++) {
                         if (dx == 0 && dy == 0 && dz == 0) continue;
+                        if (!diagonal && Math.abs(dx) + Math.abs(dy) + Math.abs(dz) > 1) continue;
                         Block neighbor = current.getRelative(dx, dy, dz);
                         if (!visited.contains(neighbor) && neighbor.getType() == targetMaterial) {
                             visited.add(neighbor);
@@ -133,6 +134,7 @@ public class VeinMinerManager {
 
     public void mineVein(Player player, Block block) {
         if (isProcessing(player)) return;
+        if (plugin.getZoneManager().isProtected(block.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) return;
         processing.add(player.getUniqueId());
 
         try {
@@ -146,6 +148,7 @@ public class VeinMinerManager {
                     damageToolBy(player, tool, 1);
                     if (tool.getType() == Material.AIR) break; // Tool broke
                 }
+                if (plugin.getZoneManager().isProtected(b.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) continue;
                 b.breakNaturally(tool);
             }
         } finally {
