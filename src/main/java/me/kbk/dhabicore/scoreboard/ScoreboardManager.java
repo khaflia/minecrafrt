@@ -121,7 +121,7 @@ public class ScoreboardManager {
         player.setCustomNameVisible(true);
         player.setPlayerListHeaderFooter(
             c("&b&lKhaleeji SMP\n&fplay.khaleeji.lol"),
-            c("\n&fDiscord: &b/gnty &7| &b/dhabi")
+            c("\n&fDiscord: &bdiscord.gg/dhabi &7| &bdiscord.gg/gnty")
         );
     }
 
