@@ -1,0 +1,43 @@
+# =============================================
+#         DhabiCore — khaleeji.lol
+#         Dhabi's Server Core by kbk
+# =============================================
+
+# ---- Chat ----
+chat:
+  format: "%rank% &7%player%&f: &r%message%"
+  join-message: "&b+ &f{player} &7joined the server!"
+  quit-message: "&8- &7{player} left the server."
+
+# ---- TPA ----
+tpa:
+  cooldown-seconds: 30
+  expire-seconds: 60
+  teleport-delay-seconds: 3
+
+# ---- Homes ----
+homes:
+  default-max: 2
+  teleport-delay-seconds: 3
+  cancel-on-move: true
+
+# ---- VeinMiner ----
+veinminer:
+  always-active: false
+  max-blocks: 64
+  world-blacklist:
+    - world_nether
+
+# ---- TreeFeller ----
+treefeller:
+  always-active: false
+  # Logs ONLY — leaves decay naturally
+  max-blocks: 50
+  world-blacklist:
+    - world_nether
+
+# ---- Scoreboard ----
+scoreboard:
+  title: "&f&lKhaleej&bSMP"
+  # Refresh every N ticks (20 = 1 second)
+  refresh-ticks: 40

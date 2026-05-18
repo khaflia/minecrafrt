@@ -1,0 +1,62 @@
+# =============================================
+#       DhabiCore Messages — khaleeji.lol
+# =============================================
+
+prefix: "&b&l\u25a0 &r"
+
+# ---- General ----
+general:
+  no-permission: "{prefix}&cYou don't have permission to do that."
+  player-not-found: "{prefix}&cPlayer &f{player} &cis not online."
+
+# ---- TPA ----
+tpa:
+  sent: "{prefix}&fTeleport request sent to &b{player}&f."
+  received: "{prefix}&b{player} &fwants to teleport to you! &7Use &b/tpaccept &7or &b/tpadeny&7."
+  cooldown: "{prefix}&cWait &f{seconds}s &cbefore sending another request."
+  no-requests: "{prefix}&cYou have no pending teleport requests."
+  cannot-self: "{prefix}&cYou cannot TPA to yourself."
+  teleport-countdown: "{prefix}&fTeleporting in &b{seconds}s&f... Don't move!"
+  teleported: "{prefix}&fTeleported to &b{player}&f."
+  accepted-target: "{prefix}&b{player} &fhas been teleported to you."
+  denied-requester: "{prefix}&b{player} &cdenied your teleport request."
+  denied-target: "{prefix}&fYou denied &b{player}&f's teleport request."
+  expired-requester: "{prefix}&cYour TPA request to &f{player} &cexpired."
+  expired-target: "{prefix}&f{player}&c's teleport request expired."
+
+# ---- Homes ----
+homes:
+  set: "{prefix}&fHome &b{name} &fset!"
+  deleted: "{prefix}&fHome &b{name} &fdeleted."
+  not-found: "{prefix}&cHome &f{name} &cdoesn't exist."
+  teleporting: "{prefix}&fTeleporting to &b{name} &fin &b{seconds}s&f... Don't move!"
+  teleported: "{prefix}&fTeleported to home &b{name}&f."
+  teleport-cancelled: "{prefix}&cTeleport cancelled — you moved!"
+  limit-reached: "{prefix}&cHome limit reached &8(&f{max}&8)&c."
+  name-too-long: "{prefix}&cHome name must be 16 characters or less."
+  usage-delhome: "{prefix}&cUsage: &f/delhome <name>"
+
+# ---- Ranks ----
+ranks:
+  usage-setrank: "{prefix}&cUsage: &f/setrank <player> <MEMBER|VIP|MVP|STAFF|ADMIN|OWNER>"
+  set-success: "{prefix}&fSet &b{player}&f's rank to {rank}&f."
+  rank-updated: "{prefix}&fYour rank is now {rank}&f."
+
+# ---- VeinMiner ----
+veinminer:
+  toggled: "{prefix}&fVeinMiner is now {status}&f."
+
+# ---- TreeFeller ----
+treefeller:
+  toggled: "{prefix}&fTreeFeller is now {status}&f."
+
+# ---- Zones ----
+zone:
+  usage-create: "{prefix}&cUsage: &f/zone create <name>"
+  usage-delete: "{prefix}&cUsage: &f/zone delete <name>"
+  need-positions: "{prefix}&cSet both positions first! Use &f/pos1 &cand &f/pos2 &c(or left/right-click with a Stick)."
+  created: "{prefix}&fZone &b{name} &fhas been protected!"
+  deleted: "{prefix}&fZone &b{name} &fremoved."
+  not-found: "{prefix}&cZone &f{name} &cdoesn't exist."
+  create-failed: "{prefix}&cFailed to create zone. Make sure both positions are in the same world."
+  not-standing-in: "{prefix}&cYou're not standing in any protected zone."
