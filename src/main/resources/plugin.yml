@@ -55,6 +55,16 @@ commands:
     description: Set zone selection position 2
     usage: /pos2
     permission: dhabicore.zone
+  fly:
+    description: Toggle flight mode (staff and above)
+    usage: /fly
+  rtp:
+    description: Teleport to a random safe location
+    usage: /rtp
+  protect:
+    description: Get protection wand and create protected areas
+    usage: /protect [create <name>]
+    permission: dhabicore.zone
 
 permissions:
   dhabicore.admin:
@@ -77,4 +87,7 @@ permissions:
     default: false
   dhabicore.homes.unlimited:
     description: Unlimited homes
+    default: op
+  dhabicore.staff:
+    description: Staff level access (fly and moderation features)
     default: op

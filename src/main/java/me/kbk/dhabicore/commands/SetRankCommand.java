@@ -33,6 +33,7 @@ public class SetRankCommand implements CommandExecutor {
         target.sendMessage(plugin.msg("ranks.rank-updated")
             .replace("{rank}", rank.getDisplayName()));
         plugin.getScoreboardManager().updateScoreboard(target);
+        plugin.getScoreboardManager().refreshAllPlayerVisuals();
         return true;
     }
 }
