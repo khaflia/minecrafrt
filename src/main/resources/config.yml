@@ -58,3 +58,4 @@ scoreboard:
 # ---- RTP ----
 rtp:
   radius: 2000
+  max-tries: 80
