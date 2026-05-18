@@ -38,6 +38,10 @@ treefeller:
 
 # ---- Scoreboard ----
 scoreboard:
-  title: "&f&lKhaleej&bSMP"
+  title: "&b&lKhaleej &f&lSMP"
   # Refresh every N ticks (20 = 1 second)
   refresh-ticks: 40
+
+# ---- RTP ----
+rtp:
+  radius: 2000

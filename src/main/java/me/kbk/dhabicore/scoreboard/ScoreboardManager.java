@@ -54,6 +54,7 @@ public class ScoreboardManager {
         playerBoards.put(player.getUniqueId(), board);
         playerObjectives.put(player.getUniqueId(), obj);
         player.setScoreboard(board);
+        applyPlayerVisuals(player);
         updateScoreboard(player);
     }
 
@@ -70,14 +71,58 @@ public class ScoreboardManager {
         for (String entry : board.getEntries()) board.resetScores(entry);
 
         int slot = 10;
-        setLine(board, obj, PADDING[slot],   c("&f&lplay.&b&lkhaleeji.lol"), slot--);
+        setLine(board, obj, PADDING[slot],   c("&b&lplay.&f&lkhaleeji.lol"), slot--);
         setLine(board, obj, PADDING[slot],   "", slot--);
-        setLine(board, obj, PADDING[slot],   c("&7 Rank &8\u00bb ") + rank.getDisplayName(), slot--);
-        setLine(board, obj, PADDING[slot],   c("&7 World &8\u00bb &f") + world, slot--);
-        setLine(board, obj, PADDING[slot],   c("&7 Online &8\u00bb &b") + online, slot--);
-        setLine(board, obj, PADDING[slot],   c("&7 Ping &8\u00bb ") + pingColor(ping) + ping + "ms", slot--);
+        setLine(board, obj, PADDING[slot],   c("&f Rank &8\u00bb ") + rank.getDisplayName(), slot--);
+        setLine(board, obj, PADDING[slot],   c("&f World &8\u00bb &b") + world, slot--);
+        setLine(board, obj, PADDING[slot],   c("&f Online &8\u00bb &b") + online, slot--);
+        setLine(board, obj, PADDING[slot],   c("&f Ping &8\u00bb ") + pingColor(ping) + ping + "ms", slot--);
         setLine(board, obj, PADDING[slot],   "", slot--);
-        setLine(board, obj, PADDING[slot],   c("&8 khaleeji.lol"), slot);
+        setLine(board, obj, PADDING[slot],   c("&b khaleeji.lol"), slot);
+
+        applyPlayerVisuals(player);
+    }
+
+    public void refreshAllPlayerVisuals() {
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            applyPlayerVisuals(online);
+        }
+    }
+
+    public void applyPlayerVisuals(Player player) {
+        Rank rank = plugin.getRankManager().getRank(player);
+        String teamName = String.format("r%02d_%s", 99 - rank.getWeight(), rank.name().toLowerCase());
+
+        for (Player viewer : Bukkit.getOnlinePlayers()) {
+            Scoreboard board = viewer.getScoreboard();
+            if (board == null) {
+                continue;
+            }
+
+            Team team = board.getTeam(teamName);
+            if (team == null) {
+                team = board.registerNewTeam(teamName);
+            }
+            team.setPrefix(rank.getPrefix() + ChatColor.WHITE + " ");
+            team.setColor(ChatColor.WHITE);
+
+            for (Team t : board.getTeams()) {
+                if (t.getName().startsWith("r") && t.hasEntry(player.getName()) && !t.getName().equals(teamName)) {
+                    t.removeEntry(player.getName());
+                }
+            }
+            if (!team.hasEntry(player.getName())) {
+                team.addEntry(player.getName());
+            }
+        }
+
+        player.setPlayerListName(rank.getPrefix() + ChatColor.WHITE + " " + player.getName());
+        player.setCustomName(rank.getPrefix() + ChatColor.WHITE + " " + player.getName());
+        player.setCustomNameVisible(true);
+        player.setPlayerListHeaderFooter(
+            c("&b&lKhaleeji SMP\n&fplay.khaleeji.lol"),
+            c("\n&fStore: &bstore.khaleeji.lol")
+        );
     }
 
     private void setLine(Scoreboard board, Objective obj, String entry, Object value, int score) {
