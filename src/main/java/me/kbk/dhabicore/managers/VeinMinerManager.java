@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import me.kbk.dhabicore.utils.RegionProtectionUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -136,6 +137,7 @@ public class VeinMinerManager {
     public void mineVein(Player player, Block origin, Material targetMaterial) {
         if (isProcessing(player)) return;
         if (plugin.getZoneManager().isProtected(origin.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) return;
+        if (!RegionProtectionUtil.canBreak(player, origin)) return;
         processing.add(player.getUniqueId());
 
         try {
@@ -144,6 +146,7 @@ public class VeinMinerManager {
 
             for (Block b : vein) {
                 if (plugin.getZoneManager().isProtected(b.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) continue;
+                if (!RegionProtectionUtil.canBreak(player, b)) continue;
                 breakWithDrops(player, b, tool);
             }
         } finally {

@@ -4,6 +4,7 @@ main: me.kbk.dhabicore.DhabiCore
 api-version: 1.20
 description: "Dhabi's Minecraft Server Core Plugin by kbk — khaleeji.lol"
 author: kbk
+softdepend: [WorldGuard]
 
 commands:
   tpa:

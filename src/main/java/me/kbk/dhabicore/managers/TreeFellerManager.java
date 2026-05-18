@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import me.kbk.dhabicore.utils.RegionProtectionUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -178,6 +179,7 @@ public class TreeFellerManager {
     public void fellTree(Player player, Block base) {
         if (isProcessing(player)) return;
         if (plugin.getZoneManager().isProtected(base.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) return;
+        if (!RegionProtectionUtil.canBreak(player, base)) return;
         processing.add(player.getUniqueId());
 
         try {
@@ -186,6 +188,7 @@ public class TreeFellerManager {
 
             for (Block b : tree) {
                 if (plugin.getZoneManager().isProtected(b.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) continue;
+                if (!RegionProtectionUtil.canBreak(player, b)) continue;
                 breakWithDrops(player, b, tool);
             }
         } finally {
