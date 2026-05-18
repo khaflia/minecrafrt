@@ -49,7 +49,12 @@ public class ZoneListener implements Listener {
 
         // Stick selection tool — works even inside zones
         ItemStack item = event.getItem();
-        if (item != null && item.getType() == Material.STICK && player.hasPermission("dhabicore.zone")) {
+        if (item != null && item.getType() == Material.STICK && item.hasItemMeta()
+            && item.getItemMeta() != null
+            && ("§bProtection Wand".equals(item.getItemMeta().getDisplayName())
+                || "§3Protection Wand".equals(item.getItemMeta().getDisplayName())
+                || item.getItemMeta().getDisplayName().contains("Protection Wand"))
+            && player.hasPermission("dhabicore.zone")) {
             Block clicked = event.getClickedBlock();
             if (clicked == null) return;
             if (event.getAction() == org.bukkit.event.block.Action.LEFT_CLICK_BLOCK) {

@@ -8,6 +8,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ProtectCommand implements CommandExecutor {
 
@@ -30,7 +31,13 @@ public class ProtectCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            player.getInventory().addItem(new ItemStack(Material.STICK, 1));
+            ItemStack wand = new ItemStack(Material.STICK, 1);
+            ItemMeta meta = wand.getItemMeta();
+            if (meta != null) {
+                meta.setDisplayName(ChatColor.AQUA + "Protection Wand");
+                wand.setItemMeta(meta);
+            }
+            player.getInventory().addItem(wand);
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
                 "&b■ &fProtection wand given &7(Stick)."));
             player.sendMessage(ChatColor.translateAlternateColorCodes('&',
