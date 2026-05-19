@@ -34,6 +34,8 @@ public class TreeFellerListener implements Listener {
         if (!plugin.getTreeFellerManager().isNaturalTree(event.getBlock())) return;
 
         org.bukkit.block.Block block = event.getBlock();
+        if (plugin.getTreeFellerManager().getTree(block).size() <= 1) return;
+
         event.setCancelled(true);
         plugin.getServer().getScheduler().runTask(plugin, () ->
             plugin.getTreeFellerManager().fellTree(player, block));

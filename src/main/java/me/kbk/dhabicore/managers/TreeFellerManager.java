@@ -202,6 +202,9 @@ public class TreeFellerManager {
             ? block.getDrops()
             : block.getDrops(tool, player);
         block.setType(Material.AIR, false);
+        if (drops.isEmpty() && isLog(block.getType())) {
+            drops = java.util.List.of(new ItemStack(block.getType(), 1));
+        }
         for (ItemStack drop : drops) {
             block.getWorld().dropItemNaturally(block.getLocation(), drop);
         }
