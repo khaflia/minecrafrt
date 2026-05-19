@@ -198,13 +198,14 @@ public class TreeFellerManager {
     private void breakWithDrops(Player player, Block block, ItemStack tool) {
         if (block.getType() == Material.AIR) return;
 
+        Material originalType = block.getType();
         Collection<ItemStack> drops = (tool == null || tool.getType() == Material.AIR)
             ? block.getDrops()
             : block.getDrops(tool, player);
-        block.setType(Material.AIR, false);
-        if (drops.isEmpty() && isLog(block.getType())) {
-            drops = java.util.List.of(new ItemStack(block.getType(), 1));
+        if (drops.isEmpty() && isLog(originalType)) {
+            drops = java.util.List.of(new ItemStack(originalType, 1));
         }
+        block.setType(Material.AIR, false);
         for (ItemStack drop : drops) {
             block.getWorld().dropItemNaturally(block.getLocation(), drop);
         }
