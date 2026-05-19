@@ -33,6 +33,8 @@ public class TreeFellerListener implements Listener {
 
         org.bukkit.block.Block block = event.getBlock();
         if (plugin.getTreeFellerManager().getTree(block).size() <= 1) return;
+        if (plugin.getZoneManager().isProtected(block.getLocation()) && !player.hasPermission("dhabicore.zone.bypass") && !player.isOp()) return;
+        if (!me.kbk.dhabicore.utils.RegionProtectionUtil.canBreak(player, block)) return;
 
         event.setCancelled(true);
         if (plugin.getConfig().getBoolean("debug.blockbreak", false)) {

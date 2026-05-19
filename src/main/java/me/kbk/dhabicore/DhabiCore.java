@@ -63,6 +63,7 @@ public class DhabiCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ChatListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new ZoneListener(this), this);
+        getServer().getPluginManager().registerEvents(new DebugBlockBreakListener(this), this);
 
         getLogger().info("DhabiCore enabled — khaleeji.lol");
     }
