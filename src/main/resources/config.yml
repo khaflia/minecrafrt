@@ -59,3 +59,7 @@ scoreboard:
 rtp:
   radius: 2000
   max-tries: 80
+
+# ---- Debug ----
+debug:
+  blockbreak: false

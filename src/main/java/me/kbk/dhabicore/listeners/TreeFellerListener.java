@@ -35,6 +35,10 @@ public class TreeFellerListener implements Listener {
         if (plugin.getTreeFellerManager().getTree(block).size() <= 1) return;
 
         event.setCancelled(true);
+        if (plugin.getConfig().getBoolean("debug.blockbreak", false)) {
+            plugin.getLogger().info("[DEBUG] TreeFeller cancelling vanilla break at "
+                + block.getX() + "," + block.getY() + "," + block.getZ() + " type=" + block.getType());
+        }
         plugin.getServer().getScheduler().runTask(plugin, () ->
             plugin.getTreeFellerManager().fellTree(player, block));
     }

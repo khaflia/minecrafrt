@@ -32,7 +32,14 @@ public class VeinMinerListener implements Listener {
 
         org.bukkit.block.Block block = event.getBlock();
         org.bukkit.Material targetType = block.getType();
+
+        if (plugin.getVeinMinerManager().getVein(block, targetType, player).size() <= 1) return;
+
         event.setCancelled(true);
+        if (plugin.getConfig().getBoolean("debug.blockbreak", false)) {
+            plugin.getLogger().info("[DEBUG] VeinMiner cancelling vanilla break at "
+                + block.getX() + "," + block.getY() + "," + block.getZ() + " type=" + targetType);
+        }
         plugin.getServer().getScheduler().runTask(plugin, () ->
             plugin.getVeinMinerManager().mineVein(player, block, targetType));
     }
