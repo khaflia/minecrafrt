@@ -39,7 +39,7 @@ treefeller:
   always-active: true
   require-sneak: false
   require-permission: false
-  require-axe: true
+  require-axe: false
   min-leaves: 3
   diagonal-detection: true
   # Max allowed by safety cap: 512

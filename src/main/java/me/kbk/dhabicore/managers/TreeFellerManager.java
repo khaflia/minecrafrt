@@ -198,7 +198,9 @@ public class TreeFellerManager {
     private void breakWithDrops(Player player, Block block, ItemStack tool) {
         if (block.getType() == Material.AIR) return;
 
-        Collection<ItemStack> drops = block.getDrops(tool, player);
+        Collection<ItemStack> drops = (tool == null || tool.getType() == Material.AIR)
+            ? block.getDrops()
+            : block.getDrops(tool, player);
         block.setType(Material.AIR, false);
         for (ItemStack drop : drops) {
             block.getWorld().dropItemNaturally(block.getLocation(), drop);
