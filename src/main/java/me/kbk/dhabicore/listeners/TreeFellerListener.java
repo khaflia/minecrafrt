@@ -26,8 +26,6 @@ public class TreeFellerListener implements Listener {
         if (plugin.getTreeFellerManager().isWorldBlacklisted(player.getWorld())) return;
         if (plugin.getTreeFellerManager().isProcessing(player)) return;
 
-        ItemStack tool = player.getInventory().getItemInMainHand();
-        if (!plugin.getTreeFellerManager().isAxe(tool.getType())) return;
         if (!plugin.getTreeFellerManager().isLog(event.getBlock().getType())) return;
 
         // Must be a natural tree with leaves
