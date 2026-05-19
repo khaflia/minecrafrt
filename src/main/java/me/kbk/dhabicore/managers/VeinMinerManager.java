@@ -8,7 +8,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import me.kbk.dhabicore.utils.RegionProtectionUtil;
 
 import java.io.File;
@@ -155,24 +154,8 @@ public class VeinMinerManager {
     }
     private void breakWithDrops(Player player, Block block, ItemStack tool) {
         if (block.getType() == Material.AIR) return;
-
-        Collection<ItemStack> drops = (tool == null || tool.getType() == Material.AIR)
-            ? block.getDrops()
-            : block.getDrops(tool, player);
-        block.setType(Material.AIR, false);
-        for (ItemStack drop : drops) {
-            block.getWorld().dropItemNaturally(block.getLocation(), drop);
-        }
-
-        if (tool != null && tool.getType().getMaxDurability() > 0 && tool.getItemMeta() instanceof Damageable meta) {
-            int next = meta.getDamage() + 1;
-            if (next >= tool.getType().getMaxDurability()) {
-                player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            } else {
-                meta.setDamage(next);
-                tool.setItemMeta(meta);
-            }
-        }
+        block.breakNaturally(tool);
     }
+
 
 }
